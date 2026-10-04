@@ -87,6 +87,9 @@ a { color: inherit; }
 .swatch-dot { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--ink); }
 .swatch-white { background: #FBFBF8; }
 .swatch-black { background: var(--ink); }
+.swatch-both { background: linear-gradient(90deg, #FBFBF8 50%, var(--ink) 50%); }
+.swatch[hidden] { display: none; }
+.price-was { margin-left: 10px; color: var(--muted); font-size: 22px; }
 
 .gift {
   display: flex; align-items: center; gap: 14px;

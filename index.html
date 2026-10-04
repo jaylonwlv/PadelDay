@@ -57,7 +57,7 @@
       <h1>Match day, but make it cute.</h1>
       <p class="lede">A racket backpack with an embroidered smiley design, a sleeve for your racket, and pockets for balls and a water bottle. For tennis, pickleball, and padel.</p>
 
-      <p class="price"><span data-price>$78</span> <span class="price-note" id="gift-pill" hidden>Free <span data-gift-name>5 overgrips</span></span></p>
+      <p class="price"><span data-price>$78</span><s class="price-was" id="price-was" hidden></s> <span class="price-note" id="gift-pill" hidden>Free <span data-gift-name>5 overgrips</span></span></p>
 
       <fieldset class="colors">
         <legend>Color: <strong id="color-name">Clean white</strong></legend>
@@ -72,14 +72,19 @@
             <span class="swatch-dot swatch-black" aria-hidden="true"></span>
             <span>Moody black</span>
           </label>
+          <label class="swatch" id="swatch-both" hidden>
+            <input type="radio" name="color" value="both">
+            <span class="swatch-dot swatch-both" aria-hidden="true"></span>
+            <span>Both</span>
+          </label>
         </div>
       </fieldset>
 
       <div class="gift" id="gift" hidden>
         <span class="gift-badge" aria-hidden="true">Free</span>
         <span class="gift-text">
-          <strong><span data-gift-name>5 overgrips</span> included free</strong>
-          <span>Fresh grip for your racket or paddle, in your bag's color. A <span data-gift-value>$10</span> value.</span>
+          <strong><span id="gift-count" data-gift-name>5 overgrips</span> included free</strong>
+          <span id="gift-detail">Fresh grip for your racket or paddle, in your bag's color. A <span data-gift-value>$10</span> value.</span>
         </span>
         <img class="gift-img" id="gift-img" src="/images/grips-white.jpg" alt="White overgrip rolls" width="720" height="410">
       </div>
@@ -134,7 +139,7 @@
     </details>
     <details>
       <summary>Which color should I pick?</summary>
-      <p>Clean white is the brighter, cuter look. Moody black hides court dust and goes with everything.</p>
+      <p>Clean white is the brighter, cuter look. Moody black hides court dust and goes with everything.<span data-both-faq hidden> Can't decide? Get both for <span data-both-price>$148</span>, one for you and one to gift.</span></p>
     </details>
     <details>
       <summary>Can I return it?</summary>

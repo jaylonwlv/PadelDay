@@ -7,6 +7,7 @@ A one-product static site for Vercel. Checkout runs on Stripe Payment Links, and
 Everything you need to change is in `config.js`:
 
 - `stripeLinks.white` and `stripeLinks.black`: one Stripe Payment Link per color (step 2)
+- `stripeLinks.both` and `bothPrice`: the "buy both" bundle (step 2). The Both option stays hidden until `stripeLinks.both` is set.
 - `freeGift`: the free 5 overgrips shown with every bag. Set `enabled` to `false` to hide it.
 - `metaPixelId`: your Pixel ID from Meta Events Manager
 - `shippingTime`: for example `"7–18 days"`
@@ -25,6 +26,8 @@ On each Payment Link:
   The `{CHECKOUT_SESSION_ID}` part is filled in by Stripe and lets the page count each purchase once.
 
 Paste both links into `config.js`.
+
+**Both bags:** create one more Payment Link with both products on it (use **Add another product**), with a $8 discount so the total is $148 (`bothPrice`). Set its redirect to `https://padelday.shop/thank-you?item=both&session_id={CHECKOUT_SESSION_ID}` so the thank-you page reports $148 to Meta even if the browser lost the order. Paste it into `stripeLinks.both`.
 
 
 ## 3. Deploy to Vercel

@@ -39,15 +39,22 @@
   document.querySelectorAll("[data-shipping]").forEach(function (el) { el.textContent = cfg.shippingTime; });
   document.querySelectorAll("[data-email]").forEach(function (el) { el.href = "mailto:" + cfg.contactEmail; });
   // Fire Purchase once per Stripe checkout session, so a refresh doesn't double-count.
-  var id = new URLSearchParams(location.search).get("session_id") || "no-session";
+  var params = new URLSearchParams(location.search);
+  var id = params.get("session_id") || "no-session";
   var key = "pd_purchase_" + id;
   var seen = false;
   try { seen = localStorage.getItem(key) === "1"; } catch (e) {}
   if (!seen && id !== "no-session") {
-    // Fallback when the browser lost the order (e.g. checkout finished on another device): color unknown.
-    var order = { value: Number(cfg.price), ids: ["racket-backpack-white", "racket-backpack-black"] };
+    // Fallback when the browser lost the order (e.g. checkout finished on another device).
+    // The Stripe redirect can say what was bought with ?item=white|black|both; otherwise the color is unknown.
+    var item = params.get("item");
+    var order = item === "both"
+      ? { value: Number(cfg.bothPrice), ids: ["racket-backpack-white", "racket-backpack-black"], n: 2 }
+      : item === "white" || item === "black"
+        ? { value: Number(cfg.price), ids: ["racket-backpack-" + item], n: 1 }
+        : { value: Number(cfg.price), ids: ["racket-backpack-white", "racket-backpack-black"], n: 1 };
     try { order = JSON.parse(sessionStorage.getItem("pd_order")) || order; } catch (e) {}
-    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: 1 }, { eventID: "purchase_" + id });
+    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.n || 1 }, { eventID: "purchase_" + id });
     try { localStorage.setItem(key, "1"); } catch (e) {}
   }
 })();
