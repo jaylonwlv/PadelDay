@@ -32,5 +32,5 @@ window.PADEL_DAY = {
   shippingTime: "7–18 days",
 
   // Where customers can reach you.
-  contactEmail: "hello@[yourdomain].com",
+  contactEmail: "jaylonw.lv@gmail.com",
 };

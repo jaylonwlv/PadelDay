@@ -15,7 +15,11 @@
   .policy { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
   .policy h1 { font-family: var(--display); font-weight: 600; font-size: clamp(40px, 8vw, 60px); line-height: 1; letter-spacing: -1px; margin: 0 0 32px; }
   .policy h2 { font-family: var(--display); font-weight: 600; font-size: 30px; margin: 40px 0 12px; }
-  .policy p { color: var(--muted); max-width: 64ch; }
+  .policy h3 { font-size: 18px; margin: 24px 0 8px; }
+  .policy p, .policy li { color: var(--muted); max-width: 64ch; }
+  .policy ul { padding-left: 20px; }
+  .policy li { margin-bottom: 8px; }
+  .policy .updated { font-size: 14px; margin: -20px 0 0; }
 </style>
 </head>
 <body>
@@ -27,18 +31,54 @@
 </header>
 <main class="policy">
   <h1>Shipping, returns, and privacy</h1>
+  <p class="updated">Last updated October 4, 2026</p>
 
-  <h2>Shipping</h2>
-  <p>Orders ship in <span data-shipping></span>. You'll get an email with a tracking link once your order is on the way. [Add which countries you ship to and any shipping fees.]</p>
+  <h2 id="shipping">Shipping</h2>
+  <p>We currently ship within the United States. Shipping is free on every order.</p>
+  <p>Orders arrive in <span data-shipping></span>. We send your order to our supplier as soon as you check out, and you'll get an email with a tracking link once it's on the way. Tracking can take a few days to start updating after you receive it.</p>
+  <p>Please check your shipping address at checkout. If you spot a mistake, email us within 12 hours and we'll fix it before the order ships. We can't redirect a package once it's in transit.</p>
+  <p>If your order hasn't arrived within 30 days of the latest estimated delivery date, email us and we'll send a replacement or give you a full refund.</p>
 
-  <h2>Returns</h2>
-  <p>[Your return window, the condition items must be in, how to start a return, who pays return shipping, and how long refunds take.]</p>
+  <h2 id="returns">Returns and refunds</h2>
+  <p>If you're not happy with your bag, you can return it within 30 days of delivery for a full refund of the item price.</p>
+  <ul>
+    <li>Items must be unused, unwashed, and in their original condition and packaging. Overgrips must be unopened.</li>
+    <li>To start a return, email us with your order details. We'll reply with the return address and instructions. Please don't send items back without contacting us first, because returns sent to the wrong address can't be refunded.</li>
+    <li>Return shipping is paid by you, unless the item arrived damaged, defective, or wasn't what you ordered.</li>
+    <li>Once we receive and check your return, we'll refund your original payment method within 5 business days. Your bank may take another 5–10 business days to show it.</li>
+  </ul>
+  <p><strong>Damaged, defective, or wrong item:</strong> email us within 14 days of delivery with a photo, and we'll send a replacement or a full refund at no cost to you. You won't need to send the item back.</p>
+  <p><strong>Cancellations:</strong> you can cancel for a full refund within 12 hours of ordering. After that, your order has usually been sent to our supplier and you'll need to return it once it arrives.</p>
 
   <h2 id="privacy">Privacy</h2>
-  <p>We use Stripe to process payments; we never see or store your full card details. We use the Meta Pixel to measure our ads, which may set cookies in your browser. [Add what personal data you collect (name, email, shipping address), why, how long you keep it, and how customers can ask you to delete it.]</p>
+  <p>This policy explains what personal information Padel Day collects when you visit this site or place an order, and how we use it.</p>
+  <h3>What we collect</h3>
+  <ul>
+    <li><strong>Order details:</strong> your name, email address, shipping address, phone number if you give one, and what you bought. You enter these at checkout.</li>
+    <li><strong>Payment details:</strong> handled entirely by Stripe, our payment processor. We never see or store your full card number.</li>
+    <li><strong>Browsing information:</strong> we use the Meta Pixel, which may set cookies and collect information such as your device, browser, the pages you view, and actions like starting checkout or completing a purchase.</li>
+    <li><strong>Messages:</strong> anything you send us by email.</li>
+  </ul>
+  <h3>How we use it</h3>
+  <ul>
+    <li>To process, ship, and track your order, and to email you about it.</li>
+    <li>To handle returns, refunds, and customer questions.</li>
+    <li>To measure and improve our ads on Facebook and Instagram.</li>
+    <li>To prevent fraud and meet legal and tax requirements.</li>
+  </ul>
+  <h3>Who we share it with</h3>
+  <p>We share only what each service needs to do its job: Stripe (payments), our supplier and shipping carriers (your name and shipping address, to deliver your order), Meta (ad measurement through the Pixel), and Vercel (which hosts this site). We don't sell your personal information.</p>
+  <h3>How long we keep it</h3>
+  <p>We keep order records for as long as we need them for tax, accounting, and legal purposes, usually up to 7 years. We keep emails only as long as needed to help you.</p>
+  <h3>Your choices and rights</h3>
+  <ul>
+    <li>You can ask us what personal information we hold about you, ask us to correct it, or ask us to delete it, by emailing <a href="mailto:jaylonw.lv@gmail.com">jaylonw.lv@gmail.com</a>. We'll reply within 30 days. We may need to keep some order records to meet legal requirements.</li>
+    <li>You can block or delete cookies in your browser settings, and manage ad preferences in your Facebook or Instagram settings.</li>
+  </ul>
+  <p>This site isn't directed at children under 13, and we don't knowingly collect their information. If we change this policy, we'll update the date at the top of this page.</p>
 
-  <h2>Contact</h2>
-  <p><a data-email href="mailto:hello@yourdomain.com">Email us</a> with any question about an order.</p>
+  <h2 id="contact">Contact</h2>
+  <p>Questions about an order or this policy? Email <a href="mailto:jaylonw.lv@gmail.com">jaylonw.lv@gmail.com</a>. We usually reply within 1–2 business days.</p>
 </main>
 <script>
   var cfg = window.PADEL_DAY || {};
