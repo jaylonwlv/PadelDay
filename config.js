@@ -12,7 +12,7 @@ window.PADEL_DAY = {
     white: "https://buy.stripe.com/7sYaEX8020Pp2rH3eO8k800",
     black: "https://buy.stripe.com/cNi3cva8a55F0jz5mW8k801",
     // Both bags in one order, priced at bothPrice. The "Both" option only shows once this is set.
-    both: "https://buy.stripe.com/cNi7sL6VY2Xxgix5mW8k802",
+    both: "https://buy.stripe.com/3cIcN53JMdCbgix7v48k803",
   },
 
   // Price for both bags together (white + black). Must match the "both" Payment Link.
