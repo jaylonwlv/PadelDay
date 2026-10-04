@@ -30,7 +30,7 @@ window.PADEL_DAY = {
   },
 
   // Stripe customer portal login link (Settings > Billing > Customer portal), so subscribers can skip or cancel.
-  manageSubscriptionLink: "",
+  manageSubscriptionLink: "https://billing.stripe.com/p/login/7sYaEX8020Pp2rH3eO8k800",
 
   // Free gift included with every bag, shown under the color picker.
   // Set enabled to false to hide it. value is what it's worth on its own.
