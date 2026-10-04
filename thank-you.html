@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Order confirmed | Padel Day</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js"></script>
+<script src="/pixel.js"></script>
+<style>
+  body { padding-bottom: 0; }
+  .done { max-width: 640px; margin: 0 auto; padding: 64px 20px 80px; }
+  .done h1 { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 9vw, 72px); line-height: 0.98; letter-spacing: -1.5px; margin: 0 0 20px; }
+  .done p { color: var(--muted); max-width: 48ch; }
+  .done .buy-button { width: auto; display: inline-flex; margin-top: 16px; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Padel Day home">
+    <img src="/logo-icon.svg" alt="" width="27" height="36">
+    <span>padel day</span>
+  </a>
+</header>
+<main class="done">
+  <h1>You're all set for match day.</h1>
+  <p>Your order is confirmed and a receipt is on its way to your email. Your bag ships in <span data-shipping></span>, and we'll send a tracking link as soon as it's on the way.</p>
+  <p>Questions about your order? <a data-email href="mailto:hello@yourdomain.com">Email us</a>.</p>
+  <a class="buy-button" href="/">Back to Padel Day</a>
+</main>
+<script>
+(function () {
+  var cfg = window.PADEL_DAY || {};
+  document.querySelectorAll("[data-shipping]").forEach(function (el) { el.textContent = cfg.shippingTime; });
+  document.querySelectorAll("[data-email]").forEach(function (el) { el.href = "mailto:" + cfg.contactEmail; });
+  // Fire Purchase once per Stripe checkout session, so a refresh doesn't double-count.
+  var id = new URLSearchParams(location.search).get("session_id") || "no-session";
+  var key = "pd_purchase_" + id;
+  var seen = false;
+  try { seen = localStorage.getItem(key) === "1"; } catch (e) {}
+  if (!seen && id !== "no-session") {
+    var order = { value: Number(cfg.price), ids: ["racket-backpack"] };
+    try { order = JSON.parse(sessionStorage.getItem("pd_order")) || order; } catch (e) {}
+    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.ids.length });
+    try { localStorage.setItem(key, "1"); } catch (e) {}
+  }
+})();
+</script>
+</body>
+</html>
