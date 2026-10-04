@@ -9,8 +9,8 @@ window.PADEL_DAY = {
   // One Stripe Payment Link per color (Stripe Dashboard > Payment Links).
   // Leave empty until you have them; the buy button will say checkout isn't connected yet.
   stripeLinks: {
-    white: "",
-    black: "",
+    white: "https://buy.stripe.com/test_dRm8wP6VMfKbfoj5wYdnW00",
+    black: "https://buy.stripe.com/test_28EbJ12FwdC33FB5wYdnW01",
   },
 
   // Free gift included with every bag, shown under the color picker.
