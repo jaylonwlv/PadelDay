@@ -22,7 +22,7 @@ window.PADEL_DAY = {
   // name is what the site calls it everywhere; keep it the same as the Stripe product name.
   gripClub: {
     name: "Grip Club",
-    link: "",
+    link: "https://buy.stripe.com/bJecN56VYgOn2rHbLk8k804",
     price: 18,
     grips: 10,
     every: "2 months",
