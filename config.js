@@ -18,6 +18,18 @@ window.PADEL_DAY = {
   // Price for both bags together (white + black). Must match the "both" Payment Link.
   bothPrice: 148,
 
+  // Grip Drop subscription: fresh overgrips on a schedule. The section stays hidden until link is set.
+  gripDrop: {
+    link: "",
+    price: 18,
+    grips: 8,
+    every: "2 months",
+    perYear: 6, // boxes per year, used to tell Meta what a subscriber is worth
+  },
+
+  // Stripe customer portal login link (Settings > Billing > Customer portal), so subscribers can skip or cancel.
+  manageSubscriptionLink: "",
+
   // Free gift included with every bag, shown under the color picker.
   // Set enabled to false to hide it. value is what it's worth on its own.
   freeGift: {

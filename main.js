@@ -5,6 +5,7 @@
   var price = Number(cfg.price || 0);
   var bothPrice = Number(cfg.bothPrice || price * 2);
   var giftValue = Number(gift.value || 0);
+  var drop = cfg.gripDrop || {};
   var fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: cfg.currency || "USD" });
   function money(n) { return fmt.format(n).replace(/\.00$/, ""); }
 
@@ -18,6 +19,39 @@
     document.getElementById("gift").hidden = false;
     document.getElementById("gift-pill").hidden = false;
   }
+  // Grip Drop subscription: only shown once its Stripe link is set.
+  if (drop.link) {
+    document.getElementById("grip-drop").hidden = false;
+    document.querySelectorAll("[data-drop-faq]").forEach(function (el) { el.hidden = false; });
+    document.querySelectorAll("[data-drop-price]").forEach(function (el) { el.textContent = money(drop.price); });
+    document.querySelectorAll("[data-drop-every]").forEach(function (el) { el.textContent = drop.every; });
+    document.querySelectorAll("[data-drop-grips]").forEach(function (el) { el.textContent = drop.grips; });
+    document.querySelectorAll("[data-drop-each]").forEach(function (el) { el.textContent = fmt.format(drop.price / drop.grips); });
+    var dropButton = document.getElementById("drop-button");
+    dropButton.href = drop.link;
+    dropButton.textContent = "Start the Grip Drop – " + money(drop.price);
+    dropButton.addEventListener("click", function (e) {
+      checkout(e, drop.link, { type: "subscription", value: Number(drop.price), ids: ["grip-drop"], n: 1 });
+    });
+  }
+  if (cfg.manageSubscriptionLink) {
+    document.querySelectorAll("[data-manage-sub]").forEach(function (el) { el.href = cfg.manageSubscriptionLink; el.hidden = false; });
+  }
+
+  // Sends the cart events, remembers the order for the thank-you page, then goes to Stripe.
+  function checkout(e, url, order) {
+    try { sessionStorage.setItem("pd_order", JSON.stringify(order)); } catch (err) {}
+    var event = { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.n };
+    window.pdTrack("AddToCart", event);
+    window.pdTrack("InitiateCheckout", event);
+    // Give the Pixel a moment to send before leaving for Stripe, or the browser can cancel it.
+    // Ctrl/Cmd-click still opens Stripe in a new tab, so leave those alone.
+    if (window.pdTrackingOn && !(e.metaKey || e.ctrlKey || e.shiftKey)) {
+      e.preventDefault();
+      setTimeout(function () { window.location.href = url; }, 300);
+    }
+  }
+
   // The "Both" option only appears once its Stripe link is set.
   if (links.both) {
     document.getElementById("swatch-both").hidden = false;
@@ -88,20 +122,8 @@
       msg.hidden = false;
       return;
     }
-    try {
-      sessionStorage.setItem("pd_order", JSON.stringify({ value: o.price, ids: o.ids, n: o.ids.length }));
-    } catch (err) {}
-    // Clicking Buy both adds the bag to the cart and starts checkout, so send both events.
-    var event = { value: o.price, currency: cfg.currency, content_ids: o.ids, content_type: "product", num_items: o.ids.length };
-    window.pdTrack("AddToCart", event);
-    window.pdTrack("InitiateCheckout", event);
-    // Give the Pixel a moment to send before leaving for Stripe, or the browser can cancel it.
-    // Ctrl/Cmd-click still opens Stripe in a new tab, so leave those alone.
-    if (window.pdTrackingOn && !(e.metaKey || e.ctrlKey || e.shiftKey)) {
-      e.preventDefault();
-      var url = links[state.color];
-      setTimeout(function () { window.location.href = url; }, 300);
-    }
+    // Clicking Buy both adds the bag to the cart and starts checkout, so checkout() sends both events.
+    checkout(e, links[state.color], { type: "bag", value: o.price, ids: o.ids, n: o.ids.length });
   });
 
   // Use the same per-color IDs as the cart and purchase events so Meta can connect them.

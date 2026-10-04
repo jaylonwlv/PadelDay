@@ -18,6 +18,11 @@
   .done h1 { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 9vw, 72px); line-height: 0.98; letter-spacing: -1.5px; margin: 0 0 20px; }
   .done p { color: var(--muted); max-width: 48ch; }
   .done .buy-button { width: auto; display: inline-flex; margin-top: 16px; }
+  .drop-offer { margin-top: 48px; padding: 24px; background: var(--lime); border: 2px solid var(--ink); border-radius: 28px; }
+  .drop-offer strong { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 1.05; }
+  .drop-offer p { color: var(--ink); margin: 8px 0 0; }
+  .drop-offer .drop-offer-fine { font-size: 14px; color: var(--muted); }
+  .drop-offer[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -28,33 +33,78 @@
   </a>
 </header>
 <main class="done">
-  <h1>You're all set for match day.</h1>
-  <p>Your order is confirmed and a receipt is on its way to your email. Your bag ships in <span data-shipping></span>, and we'll send a tracking link as soon as it's on the way.</p>
+  <h1 id="done-title">You're all set for match day.</h1>
+  <p id="done-text">Your order is confirmed and a receipt is on its way to your email. Your bag ships in <span data-shipping></span>, and we'll send a tracking link as soon as it's on the way.</p>
   <p>Questions about your order? <a data-email href="mailto:jaylonw.lv@gmail.com">Email us</a>.</p>
   <a class="buy-button" href="/">Back to Padel Day</a>
+
+  <div class="drop-offer" id="drop-offer" hidden>
+    <strong>Your free grips last about 3 weeks.</strong>
+    <p>Want the next ones to show up on their own? The Grip Drop sends <span data-drop-grips>8</span> fresh overgrips every <span data-drop-every>2 months</span> for <span data-drop-price>$18</span>, in your bag's color. Skip or cancel anytime.</p>
+    <a class="buy-button" id="drop-offer-button" href="#">Start the Grip Drop</a>
+    <p class="drop-offer-fine">Renews every <span data-drop-every>2 months</span> until you cancel. <a href="/policies#grip-drop">Subscription terms</a></p>
+  </div>
 </main>
 <script>
 (function () {
   var cfg = window.PADEL_DAY || {};
   document.querySelectorAll("[data-shipping]").forEach(function (el) { el.textContent = cfg.shippingTime; });
   document.querySelectorAll("[data-email]").forEach(function (el) { el.href = "mailto:" + cfg.contactEmail; });
-  // Fire Purchase once per Stripe checkout session, so a refresh doesn't double-count.
+  var drop = cfg.gripDrop || {};
+  var money = function (n) { return "$" + (Number(n) % 1 ? Number(n).toFixed(2) : Number(n)); };
+  document.querySelectorAll("[data-drop-price]").forEach(function (el) { el.textContent = money(drop.price); });
+  document.querySelectorAll("[data-drop-every]").forEach(function (el) { el.textContent = drop.every; });
+  document.querySelectorAll("[data-drop-grips]").forEach(function (el) { el.textContent = drop.grips; });
+
   var params = new URLSearchParams(location.search);
   var id = params.get("session_id") || "no-session";
+  var item = params.get("item");
+  var stored = null;
+  try { stored = JSON.parse(sessionStorage.getItem("pd_order")); } catch (e) {}
+  // The Stripe redirect says ?item=grips for Grip Drop sign-ups; the stored order is the backup.
+  var isDrop = item === "grips" || (!item && stored && stored.type === "subscription");
+
+  if (isDrop) {
+    document.getElementById("done-title").textContent = "You're in the Grip Drop.";
+    document.getElementById("done-text").textContent = "Your subscription is confirmed and a receipt is on its way to your email. Your first " + drop.grips + " overgrips ship in " + cfg.shippingTime + ", then a fresh box every " + drop.every + ". You can skip or cancel anytime.";
+  } else if (drop.link) {
+    // After a bag order, offer the Grip Drop: something they'll need later, not something they missed.
+    document.getElementById("drop-offer").hidden = false;
+    var offer = document.getElementById("drop-offer-button");
+    offer.href = drop.link;
+    offer.textContent = "Start the Grip Drop – " + money(drop.price);
+    offer.addEventListener("click", function (e) {
+      var order = { type: "subscription", value: Number(drop.price), ids: ["grip-drop"], n: 1 };
+      try { sessionStorage.setItem("pd_order", JSON.stringify(order)); } catch (err) {}
+      var event = { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: 1 };
+      window.pdTrack("AddToCart", event);
+      window.pdTrack("InitiateCheckout", event);
+      if (window.pdTrackingOn && !(e.metaKey || e.ctrlKey || e.shiftKey)) {
+        e.preventDefault();
+        setTimeout(function () { window.location.href = drop.link; }, 300);
+      }
+    });
+  }
+
+  // Fire the conversion once per Stripe checkout session, so a refresh doesn't double-count.
   var key = "pd_purchase_" + id;
   var seen = false;
   try { seen = localStorage.getItem(key) === "1"; } catch (e) {}
   if (!seen && id !== "no-session") {
-    // Fallback when the browser lost the order (e.g. checkout finished on another device).
-    // The Stripe redirect can say what was bought with ?item=white|black|both; otherwise the color is unknown.
-    var item = params.get("item");
-    var order = item === "both"
-      ? { value: Number(cfg.bothPrice), ids: ["racket-backpack-white", "racket-backpack-black"], n: 2 }
-      : item === "white" || item === "black"
-        ? { value: Number(cfg.price), ids: ["racket-backpack-" + item], n: 1 }
-        : { value: Number(cfg.price), ids: ["racket-backpack-white", "racket-backpack-black"], n: 1 };
-    try { order = JSON.parse(sessionStorage.getItem("pd_order")) || order; } catch (e) {}
-    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.n || 1 }, { eventID: "purchase_" + id });
+    if (isDrop) {
+      // Subscriptions are a separate event so they don't blur bag sales; predicted_ltv is a year of boxes.
+      window.pdTrack("Subscribe", { value: Number(drop.price), currency: cfg.currency, predicted_ltv: Number(drop.price) * Number(drop.perYear || 6), content_ids: ["grip-drop"] }, { eventID: "subscribe_" + id });
+    } else {
+      // Fallback when the browser lost the order (e.g. checkout finished on another device).
+      // The Stripe redirect can say what was bought with ?item=white|black|both; otherwise the color is unknown.
+      var order = item === "both"
+        ? { value: Number(cfg.bothPrice), ids: ["racket-backpack-white", "racket-backpack-black"], n: 2 }
+        : item === "white" || item === "black"
+          ? { value: Number(cfg.price), ids: ["racket-backpack-" + item], n: 1 }
+          : { value: Number(cfg.price), ids: ["racket-backpack-white", "racket-backpack-black"], n: 1 };
+      if (stored && stored.type !== "subscription") order = stored;
+      window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.n || 1 }, { eventID: "purchase_" + id });
+    }
     try { localStorage.setItem(key, "1"); } catch (e) {}
   }
 })();

@@ -147,6 +147,22 @@ a { color: inherit; }
 }
 .band img { display: block; justify-self: end; width: clamp(130px, 30vw, 340px); height: auto; }
 
+/* Grip Drop */
+.drop {
+  max-width: 1180px; margin: 0 auto 56px; padding: 0 20px;
+  display: grid; gap: 24px; align-items: center;
+}
+.drop[hidden] { display: none; }
+.drop-img { width: 100%; height: auto; border-radius: var(--radius-lg); background: #fff; }
+.drop-body { background: var(--lime); border: 2px solid var(--ink); border-radius: var(--radius-lg); padding: 28px 24px; }
+.drop-kicker { display: inline-block; background: var(--ink); color: var(--lime); font-weight: 700; font-size: 14px; padding: 5px 12px; border-radius: var(--radius-pill); }
+.drop h2 { font-family: var(--display); font-weight: 600; font-size: clamp(32px, 6vw, 48px); line-height: 1; letter-spacing: -1px; margin: 14px 0 12px; }
+.drop-body > p { margin: 0 0 16px; max-width: 52ch; }
+.drop-points { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 6px; }
+.drop-points li::before { content: "✓"; font-weight: 700; margin-right: 8px; }
+.drop-fine { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
+.site-footer a[hidden], [data-drop-faq][hidden] { display: none; }
+
 /* FAQ */
 .faq { max-width: 820px; margin: 0 auto; padding: 56px 20px; }
 .faq details { border-top: 2px solid var(--ink); }
@@ -195,6 +211,8 @@ a { color: inherit; }
   .fit-list { grid-template-columns: 1fr 1fr; column-gap: 48px; }
   /* Line the text and bag up with the product section's edges instead of the screen's */
   .band { padding: 64px max(40px, calc(50% - 550px)) 0; column-gap: 40px; }
+  .drop { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 40px; padding: 0 40px; margin-bottom: 80px; }
+  .drop-body { padding: 40px; }
   .site-footer { padding: 40px; }
   .sticky-buy { display: none; }
 }

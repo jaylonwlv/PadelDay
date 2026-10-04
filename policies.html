@@ -51,6 +51,16 @@
   <p><strong>Damaged, defective, or wrong item:</strong> email us within 14 days of delivery with a photo, and we'll send a replacement or a full refund at no cost to you. You won't need to send the item back.</p>
   <p><strong>Cancellations:</strong> you can cancel for a full refund within 24 hours of ordering. After that, your order has usually been sent to our supplier and you'll need to return it once it arrives.</p>
 
+  <div data-drop-terms hidden>
+  <h2 id="grip-drop">Grip Drop subscription</h2>
+  <p>The Grip Drop is an automatically renewing subscription. When you sign up, you're charged <span data-drop-price>$18</span> right away and again every <span data-drop-every>2 months</span> until you cancel. Each box has <span data-drop-grips>8</span> overgrips in the color you chose and ships free, arriving in <span data-shipping></span>.</p>
+  <ul>
+    <li><strong>Skip or cancel anytime</strong> before your next renewal date<span data-manage-sub-text hidden> using the <a data-manage-sub href="#">manage subscription</a> link, or</span> by emailing <a href="mailto:jaylonw.lv@gmail.com">jaylonw.lv@gmail.com</a>. Cancelling stops all future charges.</li>
+    <li>If you're charged for a renewal you didn't want, email us within 24 hours and we'll cancel that box and refund it in full. Once a box has shipped, it can't be refunded, but you can still cancel future boxes.</li>
+    <li>Damaged or missing boxes are replaced free, the same as bag orders.</li>
+  </ul>
+  </div>
+
   <h2 id="privacy">Privacy</h2>
   <p>This policy explains what personal information Padel Day collects when you visit this site or place an order, and how we use it.</p>
   <h3>What we collect</h3>
@@ -85,6 +95,16 @@
   var cfg = window.PADEL_DAY || {};
   document.querySelectorAll("[data-shipping]").forEach(function (el) { el.textContent = cfg.shippingTime; });
   document.querySelectorAll("[data-email]").forEach(function (el) { el.href = "mailto:" + cfg.contactEmail; el.textContent = cfg.contactEmail; });
+  var drop = cfg.gripDrop || {};
+  var money = function (n) { return "$" + (Number(n) % 1 ? Number(n).toFixed(2) : Number(n)); };
+  document.querySelectorAll("[data-drop-price]").forEach(function (el) { el.textContent = money(drop.price); });
+  document.querySelectorAll("[data-drop-every]").forEach(function (el) { el.textContent = drop.every; });
+  document.querySelectorAll("[data-drop-grips]").forEach(function (el) { el.textContent = drop.grips; });
+  if (drop.link) document.querySelectorAll("[data-drop-terms]").forEach(function (el) { el.hidden = false; });
+  if (cfg.manageSubscriptionLink) {
+    document.querySelectorAll("[data-manage-sub]").forEach(function (el) { el.href = cfg.manageSubscriptionLink; });
+    document.querySelectorAll("[data-manage-sub-text]").forEach(function (el) { el.hidden = false; });
+  }
 </script>
 </body>
 </html>
