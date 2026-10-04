@@ -22,7 +22,7 @@ window.PADEL_DAY = {
   },
 
   // Your Meta Pixel ID (Events Manager > Data sources). Leave empty to disable tracking.
-  metaPixelId: "",
+  metaPixelId: "1815248366151803",
 
   // Shipping estimate shown on the page, e.g. "7–14 business days".
   shippingTime: "7–18 days",
