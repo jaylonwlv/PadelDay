@@ -18,8 +18,10 @@ window.PADEL_DAY = {
   // Price for both bags together (white + black). Must match the "both" Payment Link.
   bothPrice: 148,
 
-  // Grip Drop subscription: fresh overgrips on a schedule. The section stays hidden until link is set.
-  gripDrop: {
+  // Grip Club subscription: fresh overgrips on a schedule. The section stays hidden until link is set.
+  // name is what the site calls it everywhere; keep it the same as the Stripe product name.
+  gripClub: {
+    name: "Grip Club",
     link: "",
     price: 18,
     grips: 10,

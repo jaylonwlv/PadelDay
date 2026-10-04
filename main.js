@@ -5,7 +5,7 @@
   var price = Number(cfg.price || 0);
   var bothPrice = Number(cfg.bothPrice || price * 2);
   var giftValue = Number(gift.value || 0);
-  var drop = cfg.gripDrop || {};
+  var drop = cfg.gripClub || {};
   var fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: cfg.currency || "USD" });
   function money(n) { return fmt.format(n).replace(/\.00$/, ""); }
 
@@ -19,9 +19,10 @@
     document.getElementById("gift").hidden = false;
     document.getElementById("gift-pill").hidden = false;
   }
-  // Grip Drop subscription: only shown once its Stripe link is set.
+  // Grip Club subscription: only shown once its Stripe link is set.
   if (drop.link) {
-    document.getElementById("grip-drop").hidden = false;
+    document.getElementById("grip-club").hidden = false;
+    document.querySelectorAll("[data-club-name]").forEach(function (el) { el.textContent = drop.name; });
     document.querySelectorAll("[data-drop-faq]").forEach(function (el) { el.hidden = false; });
     document.querySelectorAll("[data-drop-price]").forEach(function (el) { el.textContent = money(drop.price); });
     document.querySelectorAll("[data-drop-every]").forEach(function (el) { el.textContent = drop.every; });
@@ -29,9 +30,9 @@
     document.querySelectorAll("[data-drop-each]").forEach(function (el) { el.textContent = fmt.format(drop.price / drop.grips); });
     var dropButton = document.getElementById("drop-button");
     dropButton.href = drop.link;
-    dropButton.textContent = "Start the Grip Drop – " + money(drop.price);
+    dropButton.textContent = "Join " + drop.name + " – " + money(drop.price);
     dropButton.addEventListener("click", function (e) {
-      checkout(e, drop.link, { type: "subscription", value: Number(drop.price), ids: ["grip-drop"], n: 1 });
+      checkout(e, drop.link, { type: "subscription", value: Number(drop.price), ids: ["grip-club"], n: 1 });
     });
   }
   if (cfg.manageSubscriptionLink) {

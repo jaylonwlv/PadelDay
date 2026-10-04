@@ -8,7 +8,7 @@ Everything you need to change is in `config.js`:
 
 - `stripeLinks.white` and `stripeLinks.black`: one Stripe Payment Link per color (step 2)
 - `stripeLinks.both` and `bothPrice`: the "buy both" bundle (step 2). The Both option stays hidden until `stripeLinks.both` is set.
-- `gripDrop`: the Grip Drop overgrip subscription (step 2). Hidden until `gripDrop.link` is set.
+- `gripClub`: the Grip Club overgrip subscription (step 2). Hidden until `gripClub.link` is set; `gripClub.name` renames it everywhere on the site.
 - `manageSubscriptionLink`: Stripe's customer portal login link, so subscribers can skip or cancel (shown in the footer and policies).
 - `freeGift`: the free 5 overgrips shown with every bag. Set `enabled` to `false` to hide it.
 - `metaPixelId`: your Pixel ID from Meta Events Manager
@@ -29,7 +29,7 @@ On each Payment Link:
 
 Paste both links into `config.js`.
 
-**Grip Drop:** create a product "Grip Drop – 10 overgrips every 2 months" with a recurring price of $18 billed every 2 months, and a Payment Link for it. Collect the shipping address and phone number, and add a custom dropdown field "Grip color" (White, Black, Mixed). Redirect to `https://padelday.shop/thank-you?item=grips&session_id={CHECKOUT_SESSION_ID}` so the thank-you page shows the subscription message and sends Meta a `Subscribe` event instead of `Purchase`. Paste it into `gripDrop.link`. Then turn on the customer portal (Settings > Billing > Customer portal), copy its login link into `manageSubscriptionLink`, and order each subscriber's next box from the supplier about 2 weeks before it renews.
+**Grip Club:** create a product "Grip Club – 10 overgrips every 2 months" with a recurring price of $18 billed every 2 months, and a Payment Link for it. Collect the shipping address and phone number, and add a custom dropdown field "Grip color" (White, Black, Mixed). Redirect to `https://padelday.shop/thank-you?item=grips&session_id={CHECKOUT_SESSION_ID}` so the thank-you page shows the subscription message and sends Meta a `Subscribe` event instead of `Purchase`. Paste it into `gripClub.link`. Then turn on the customer portal (Settings > Billing > Customer portal), copy its login link into `manageSubscriptionLink`, and order each subscriber's next box from the supplier about 2 weeks before it renews.
 
 **Both bags:** create one more product, "Padel Day racket backpacks – White + Black (with 10 free overgrips)", priced at $148 (`bothPrice`), and a Payment Link for it. Payment Links can't pre-apply a discount, so price the product itself at $148. Set its redirect to `https://padelday.shop/thank-you?item=both&session_id={CHECKOUT_SESSION_ID}` so the thank-you page reports $148 to Meta even if the browser lost the order. Paste it into `stripeLinks.both`.
 

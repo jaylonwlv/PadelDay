@@ -147,7 +147,7 @@ a { color: inherit; }
 }
 .band img { display: block; justify-self: end; width: clamp(130px, 30vw, 340px); height: auto; }
 
-/* Grip Drop */
+/* Grip Club */
 .drop {
   max-width: 1180px; margin: 0 auto 56px; padding: 0 20px;
   display: grid; gap: 24px; align-items: center;
