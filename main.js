@@ -75,14 +75,16 @@
     window.pdTrack("AddToCart", event);
     window.pdTrack("InitiateCheckout", event);
     // Give the Pixel a moment to send before leaving for Stripe, or the browser can cancel it.
-    if (window.pdTrackingOn) {
+    // Ctrl/Cmd-click still opens Stripe in a new tab, so leave those alone.
+    if (window.pdTrackingOn && !(e.metaKey || e.ctrlKey || e.shiftKey)) {
       e.preventDefault();
       var url = links[state.color];
       setTimeout(function () { window.location.href = url; }, 300);
     }
   });
 
-  window.pdTrack("ViewContent", { value: price, currency: cfg.currency, content_ids: ["racket-backpack"], content_type: "product" });
+  // Use the same per-color IDs as the cart and purchase events so Meta can connect them.
+  window.pdTrack("ViewContent", { value: price, currency: cfg.currency, content_ids: ["racket-backpack-white", "racket-backpack-black"], content_type: "product" });
 
   // Sticky buy bar appears once the main buy button scrolls out of view
   var sticky = document.getElementById("sticky-buy");

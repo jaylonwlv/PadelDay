@@ -44,9 +44,10 @@
   var seen = false;
   try { seen = localStorage.getItem(key) === "1"; } catch (e) {}
   if (!seen && id !== "no-session") {
-    var order = { value: Number(cfg.price), ids: ["racket-backpack"] };
+    // Fallback when the browser lost the order (e.g. checkout finished on another device): color unknown.
+    var order = { value: Number(cfg.price), ids: ["racket-backpack-white", "racket-backpack-black"] };
     try { order = JSON.parse(sessionStorage.getItem("pd_order")) || order; } catch (e) {}
-    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.ids.length }, { eventID: "purchase_" + id });
+    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: 1 }, { eventID: "purchase_" + id });
     try { localStorage.setItem(key, "1"); } catch (e) {}
   }
 })();
