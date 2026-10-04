@@ -27,7 +27,7 @@ On each Payment Link:
 
 Paste both links into `config.js`.
 
-**Both bags:** create one more Payment Link with both products on it (use **Add another product**), with a $8 discount so the total is $148 (`bothPrice`). Set its redirect to `https://padelday.shop/thank-you?item=both&session_id={CHECKOUT_SESSION_ID}` so the thank-you page reports $148 to Meta even if the browser lost the order. Paste it into `stripeLinks.both`.
+**Both bags:** create one more product, "Padel Day racket backpacks – White + Black (with 10 free overgrips)", priced at $148 (`bothPrice`), and a Payment Link for it. Payment Links can't pre-apply a discount, so price the product itself at $148. Set its redirect to `https://padelday.shop/thank-you?item=both&session_id={CHECKOUT_SESSION_ID}` so the thank-you page reports $148 to Meta even if the browser lost the order. Paste it into `stripeLinks.both`.
 
 
 ## 3. Deploy to Vercel
