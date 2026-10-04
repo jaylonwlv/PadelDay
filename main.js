@@ -1,18 +1,21 @@
 (function () {
   var cfg = window.PADEL_DAY || {};
   var links = cfg.stripeLinks || {};
-  var addOn = cfg.addOn || {};
+  var gift = cfg.freeGift || {};
   var price = Number(cfg.price || 0);
-  var addOnPrice = Number(addOn.price || 0);
   var fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: cfg.currency || "USD" });
   function money(n) { return fmt.format(n).replace(/\.00$/, ""); }
 
   // Fill shared values from config.js
   document.querySelectorAll("[data-shipping]").forEach(function (el) { el.textContent = cfg.shippingTime; });
   document.querySelectorAll("[data-email]").forEach(function (el) { el.href = "mailto:" + cfg.contactEmail; });
-  document.querySelectorAll("[data-addon-name]").forEach(function (el) { el.textContent = addOn.name; });
-  document.querySelectorAll("[data-addon-price]").forEach(function (el) { el.textContent = money(addOnPrice); });
-  document.querySelectorAll("[data-addon-note]").forEach(function (el) { el.textContent = addOn.photoNote || ""; });
+  document.querySelectorAll("[data-price]").forEach(function (el) { el.textContent = money(price); });
+  document.querySelectorAll("[data-gift-name]").forEach(function (el) { el.textContent = gift.name; });
+  document.querySelectorAll("[data-gift-value]").forEach(function (el) { el.textContent = money(Number(gift.value || 0)); });
+  if (gift.enabled) {
+    document.getElementById("gift").hidden = false;
+    document.getElementById("gift-pill").hidden = false;
+  }
 
   // Gallery
   var mainImage = document.getElementById("main-image");
@@ -30,27 +33,19 @@
     white: { name: "Clean white", short: "White", button: "Buy the white bag", thumb: 1 },
     black: { name: "Moody black", short: "Black", button: "Buy the black bag", thumb: 2 },
   };
-  var state = { color: "white", grips: false };
+  var state = { color: "white" };
   var buyButton = document.getElementById("buy-button");
   var msg = document.getElementById("checkout-msg");
-  var addOnBox = document.getElementById("addon");
-  var addOnInput = document.getElementById("addon-input");
-  if (addOn.enabled) addOnBox.hidden = false;
 
-  function total() { return price + (state.grips ? addOnPrice : 0); }
-  function currentLink() {
-    return state.grips ? links[state.color + "WithGrips"] : links[state.color];
-  }
   function render() {
     var c = colors[state.color];
     document.getElementById("color-name").textContent = c.name;
-    var gripImg = document.getElementById("addon-img");
-    gripImg.src = "/images/grips-" + state.color + ".jpg";
-    gripImg.alt = (state.color === "white" ? "White" : "Black") + " overgrip rolls";
-    document.getElementById("sticky-color").textContent = c.short + (state.grips ? " + grips" : "");
-    buyButton.textContent = (state.grips ? "Buy bag + grips" : c.button) + " – " + money(total());
-    document.querySelectorAll("[data-price]").forEach(function (el) { el.textContent = money(total()); });
-    buyButton.href = currentLink() || "#";
+    var giftImg = document.getElementById("gift-img");
+    giftImg.src = "/images/grips-" + state.color + ".jpg";
+    giftImg.alt = c.short + " overgrip rolls";
+    document.getElementById("sticky-color").textContent = c.short;
+    buyButton.textContent = c.button + " – " + money(price);
+    buyButton.href = links[state.color] || "#";
     msg.hidden = true;
   }
 
@@ -61,29 +56,21 @@
       render();
     });
   });
-  addOnInput.addEventListener("change", function () {
-    state.grips = addOnInput.checked;
-    if (state.grips) window.pdTrack("AddToCart", { value: addOnPrice, currency: cfg.currency, content_ids: ["overgrips-5"], content_type: "product" });
-    render();
-  });
   render();
 
   // Checkout
   buyButton.addEventListener("click", function (e) {
-    var link = currentLink();
-    if (!link) {
+    if (!links[state.color]) {
       e.preventDefault();
-      msg.textContent = state.grips
-        ? "Checkout for the bag with grips isn't connected yet. Add the " + state.color + "WithGrips link in config.js."
-        : "Checkout isn't connected yet. Add your Stripe Payment Links in config.js.";
+      msg.textContent = "Checkout isn't connected yet. Add your Stripe Payment Links in config.js.";
       msg.hidden = false;
       return;
     }
-    var ids = ["racket-backpack-" + state.color].concat(state.grips ? ["overgrips-5"] : []);
+    var ids = ["racket-backpack-" + state.color];
     try {
-      sessionStorage.setItem("pd_order", JSON.stringify({ value: total(), ids: ids }));
+      sessionStorage.setItem("pd_order", JSON.stringify({ value: price, ids: ids }));
     } catch (err) {}
-    window.pdTrack("InitiateCheckout", { value: total(), currency: cfg.currency, content_ids: ids, content_type: "product", num_items: ids.length });
+    window.pdTrack("InitiateCheckout", { value: price, currency: cfg.currency, content_ids: ids, content_type: "product", num_items: 1 });
   });
 
   window.pdTrack("ViewContent", { value: price, currency: cfg.currency, content_ids: ["racket-backpack"], content_type: "product" });

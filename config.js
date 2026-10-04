@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 window.PADEL_DAY = {
   // Price shown on the page. Must match the price in your Stripe Payment Links.
-  price: 68,
+  price: 78,
   currency: "USD",
 
   // One Stripe Payment Link per color (Stripe Dashboard > Payment Links).
@@ -11,18 +11,14 @@ window.PADEL_DAY = {
   stripeLinks: {
     white: "",
     black: "",
-    // Bundle links: the bag plus the overgrip add-on, priced at price + addOn.price.
-    whiteWithGrips: "",
-    blackWithGrips: "",
   },
 
-  // Optional add-on shown under the color picker. Set enabled to false to hide it.
-  addOn: {
+  // Free gift included with every bag, shown under the color picker.
+  // Set enabled to false to hide it. value is what it's worth on its own.
+  freeGift: {
     enabled: true,
     name: "5 overgrips",
-    price: 10,
-    // Optional small note under the add-on. Leave empty to hide it.
-    photoNote: "",
+    value: 10,
   },
 
   // Your Meta Pixel ID (Events Manager > Data sources). Leave empty to disable tracking.
