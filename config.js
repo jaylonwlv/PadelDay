@@ -22,7 +22,7 @@ window.PADEL_DAY = {
   gripDrop: {
     link: "",
     price: 18,
-    grips: 8,
+    grips: 10,
     every: "2 months",
     perYear: 6, // boxes per year, used to tell Meta what a subscriber is worth
   },
