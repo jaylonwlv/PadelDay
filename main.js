@@ -70,7 +70,16 @@
     try {
       sessionStorage.setItem("pd_order", JSON.stringify({ value: price, ids: ids }));
     } catch (err) {}
-    window.pdTrack("InitiateCheckout", { value: price, currency: cfg.currency, content_ids: ids, content_type: "product", num_items: 1 });
+    // Clicking Buy both adds the bag to the cart and starts checkout, so send both events.
+    var event = { value: price, currency: cfg.currency, content_ids: ids, content_type: "product", num_items: 1 };
+    window.pdTrack("AddToCart", event);
+    window.pdTrack("InitiateCheckout", event);
+    // Give the Pixel a moment to send before leaving for Stripe, or the browser can cancel it.
+    if (window.pdTrackingOn) {
+      e.preventDefault();
+      var url = links[state.color];
+      setTimeout(function () { window.location.href = url; }, 300);
+    }
   });
 
   window.pdTrack("ViewContent", { value: price, currency: cfg.currency, content_ids: ["racket-backpack"], content_type: "product" });

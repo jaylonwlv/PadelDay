@@ -46,7 +46,7 @@
   if (!seen && id !== "no-session") {
     var order = { value: Number(cfg.price), ids: ["racket-backpack"] };
     try { order = JSON.parse(sessionStorage.getItem("pd_order")) || order; } catch (e) {}
-    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.ids.length });
+    window.pdTrack("Purchase", { value: order.value, currency: cfg.currency, content_ids: order.ids, content_type: "product", num_items: order.ids.length }, { eventID: "purchase_" + id });
     try { localStorage.setItem(key, "1"); } catch (e) {}
   }
 })();

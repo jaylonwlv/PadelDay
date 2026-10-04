@@ -12,5 +12,7 @@
 
   window.fbq("init", cfg.metaPixelId);
   window.fbq("track", "PageView");
-  window.pdTrack = function (event, data) { window.fbq("track", event, data || {}); };
+  // opts.eventID lets Meta drop duplicate events (e.g. a Purchase sent twice).
+  window.pdTrack = function (event, data, opts) { window.fbq("track", event, data || {}, opts || {}); };
+  window.pdTrackingOn = true;
 })();
